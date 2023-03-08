@@ -1,24 +1,29 @@
-name: Test subtraction
+name: Python application
 
-on: [push]
+on: push
 
 jobs:
-  test:
+  tests:
+    runs-on: ${{ matrix.os }}
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest]
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
+      - name: Install Python ✨
+        uses: actions/setup-python@v4.5.0
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
 
-    - name: Run tests
-      run: pytest test_subtraction.py
+      - name: Run tests
+        run: |
+          pip install pytest
+          python -m pytest
